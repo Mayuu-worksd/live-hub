@@ -1,0 +1,23 @@
+{
+  "name": "livehub-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "npm@11.8.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "lint": "turbo run lint"
+  },
+  "devDependencies": {
+    "turbo": "latest",
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.12.0"
+  }
+}
