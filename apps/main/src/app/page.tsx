@@ -108,7 +108,7 @@ export default function LandingPage() {
             <p className="text-primary text-[10px] font-bold tracking-widest uppercase mb-2">Curated Collections</p>
             <h2 className="text-3xl font-bold text-white font-heading tracking-tight">Handpicked Categories</h2>
           </div>
-          <Link href="/register" className="text-zinc-400 hover:text-primary text-sm font-semibold flex items-center gap-1 transition-colors">
+          <Link href="/home" className="text-zinc-400 hover:text-primary text-sm font-semibold flex items-center gap-1 transition-colors">
             View All <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
