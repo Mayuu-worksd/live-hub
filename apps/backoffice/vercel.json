@@ -1,5 +1,5 @@
 {
   "framework": "nextjs",
-  "buildCommand": "next build",
-  "installCommand": "npm install"
+  "installCommand": "npm install && npm install lightningcss-linux-x64-gnu@1.32.0 lightningcss-linux-x64-musl@1.32.0 @next/swc-linux-x64-gnu@16.2.9 @next/swc-linux-x64-musl@16.2.9 --no-save --force",
+  "buildCommand": "next build"
 }
