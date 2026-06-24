@@ -1,6 +1,3 @@
 {
-  "buildCommand": "npx turbo run build --filter=@livehub/backoffice",
-  "outputDirectory": "apps/backoffice/.next",
-  "installCommand": "npm install",
   "framework": "nextjs"
 }

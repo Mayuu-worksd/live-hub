@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { supabaseAdmin } from '@livehub/shared/server';
+import { supabaseAdmin } from '@/lib/supabase/admin';
 import { ProfileView } from './ProfileView';
 
 export default async function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
