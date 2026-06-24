@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    turbo: false as never,
+  },
   allowedDevOrigins: ["*"],
   serverExternalPackages: [
     'firebase-admin',
