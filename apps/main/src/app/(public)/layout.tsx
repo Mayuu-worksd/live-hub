@@ -9,7 +9,7 @@ import { MobileNav } from '@/components/layout/MobileNav';
 import { cn } from '@/lib/utils/cn';
 
 const AUTH_PAGES = ['/login', '/register'];
-const PUBLIC_PAGES = ['/login', '/register', '/home'];
+const PUBLIC_PAGES = ['/login', '/register'];
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuthStore();
@@ -28,7 +28,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
     if (!user) {
       if (!isPublicPage && !isOnboarding) {
-        router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
+        const dest = pathname === '/home' ? '/register' : '/login';
+        router.replace(`${dest}?redirect=${encodeURIComponent(pathname)}`);
       }
       return;
     }

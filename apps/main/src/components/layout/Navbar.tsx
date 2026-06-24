@@ -41,7 +41,7 @@ export function Navbar() {
       )}
     >
       <div className="mx-auto flex h-full max-w-[1280px] items-center justify-between px-6">
-        <Link href={user ? '/explore' : '/'} className="flex items-center gap-2.5">
+        <Link href={user ? '/home' : '/'} className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
             <Radio className="h-4 w-4 text-white" />
           </div>

@@ -19,7 +19,7 @@ import { cn } from '@/lib/utils/cn';
 
 const mainNav = [
   { href: '/', label: 'Home', icon: Home },
-  { href: '/explore', label: 'Explore', icon: Compass },
+  { href: '/home', label: 'Explore', icon: Compass },
   { href: '/studio', label: 'Go Live', icon: Radio },
   { href: '/messages', label: 'Messages', icon: MessageCircle },
   { href: '/profile/me', label: 'Profile', icon: User },
@@ -89,7 +89,7 @@ export function Sidebar() {
             {categories.map((cat) => (
               <Link
                 key={cat.label}
-                href={`/explore?cat=${cat.label.toLowerCase()}`}
+                href={`/home?cat=${cat.label.toLowerCase()}`}
                 className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.03] transition-all duration-200"
               >
                 <cat.icon className="h-4 w-4" />
