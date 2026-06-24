@@ -10,9 +10,6 @@ const nextConfig: NextConfig = {
     'jose',
     'livekit-server-sdk',
   ],
-  turbopack: {
-    root: '../../',
-  },
   images: {
     remotePatterns: [
       {
