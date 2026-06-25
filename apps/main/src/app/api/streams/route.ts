@@ -35,8 +35,9 @@ export async function GET(req: NextRequest) {
 
   if (category && category !== 'all') query = query.eq('category', category);
 
-  let { data, error } = await query;
+  const { data: rawData, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  let data = rawData;
 
   if (data && interests.length > 0 && (!category || category === 'all')) {
     // Sort streams matching interests to the top, while preserving trending/new secondary sort
