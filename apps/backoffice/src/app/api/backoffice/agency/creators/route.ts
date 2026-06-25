@@ -15,20 +15,30 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    // Attempt to query agency members/creators.
-    // If the table doesn't exist yet, this will gracefully fail and we can return an empty array.
+    // Fetch creators and their profiles
     const { data, error } = await supabaseAdmin
       .from('users')
-      .select('id, username, email, role, status')
-      .eq('role', 'creator'); // Simplified for now, real implementation would join agency_members
+      .select(`
+        id, username, email, role, is_banned,
+        profile:profiles(display_name, followers_count, total_earned)
+      `)
+      .in('role', ['creator', 'verified_creator']); // Fetch both creator types
 
     if (error) {
       console.error('Supabase error fetching creators:', error);
-      // Fallback to empty array if table doesn't exist or error occurs
+      // Fallback to empty array if error occurs
       return NextResponse.json({ data: [] });
     }
 
-    return NextResponse.json({ data: data || [] });
+    const formattedData = (data || []).map((user: any) => ({
+      id: user.id,
+      name: user.profile?.display_name || user.username,
+      status: user.is_banned ? 'Banned' : 'Active',
+      followers: user.profile?.followers_count || 0,
+      periodEarnings: `$${(user.profile?.total_earned || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+    }));
+
+    return NextResponse.json({ data: formattedData });
   } catch (error) {
     console.error('Error fetching agency creators:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

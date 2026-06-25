@@ -7,11 +7,12 @@ import { History } from 'lucide-react';
 
 interface AuditRow {
   id: string;
-  timestamp: string;
-  actor: string;
+  created_at: string;
+  admin_id: string | null;
   action: string;
-  target: string;
-  ip: string;
+  target_table: string | null;
+  target_id: string | null;
+  details: Record<string, any> | null;
 }
 
 export default function SuperAdminAudit() {
@@ -39,11 +40,12 @@ export default function SuperAdminAudit() {
   }, []);
 
   const columns: Column<AuditRow>[] = [
-    { header: 'Timestamp', accessorKey: 'timestamp' },
-    { header: 'Actor', accessorKey: 'actor' },
-    { header: 'Action Type', accessorKey: 'action' },
-    { header: 'Target', accessorKey: 'target' },
-    { header: 'IP Address', accessorKey: 'ip' },
+    { header: 'Timestamp', cell: (row) => new Date(row.created_at).toLocaleString() },
+    { header: 'Admin ID', cell: (row) => row.admin_id ?? '—' },
+    { header: 'Action', accessorKey: 'action' },
+    { header: 'Target Table', cell: (row) => row.target_table ?? '—' },
+    { header: 'Target ID', cell: (row) => row.target_id ?? '—' },
+    { header: 'Details', cell: (row) => row.details ? JSON.stringify(row.details).slice(0, 60) : '—' },
   ];
 
   return (

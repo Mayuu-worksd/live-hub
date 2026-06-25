@@ -8,15 +8,11 @@ import { createSupabaseBrowserClient } from '@livehub/shared';
 
 interface ReportRow {
   id: string;
-  timestamp: string;
-  reporter: string;
-  target: string;
-  category: string;
-  severity: string;
-  reporter_id?: string;
-  reported_id?: string;
-  reason?: string;
-  created_at?: string;
+  reporter_id: string;
+  reported_id: string;
+  reason: string;
+  status: string;
+  created_at: string;
 }
 
 export default function ModeratorQueue() {
@@ -69,12 +65,12 @@ export default function ModeratorQueue() {
   }, [supabase]);
 
   const columns: Column<ReportRow>[] = [
-    { header: 'Report ID', accessorKey: 'id' },
-    { header: 'Timestamp', cell: (row) => new Date(row.created_at || row.timestamp).toLocaleString() },
-    { header: 'Reporter ID', accessorKey: 'reporter_id' },
-    { header: 'Target ID', accessorKey: 'reported_id' },
+    { header: 'Report ID', cell: (row) => row.id.slice(0, 8) + '...' },
+    { header: 'Timestamp', cell: (row) => new Date(row.created_at).toLocaleString() },
+    { header: 'Reporter ID', cell: (row) => row.reporter_id.slice(0, 8) + '...' },
+    { header: 'Target ID', cell: (row) => row.reported_id.slice(0, 8) + '...' },
     { header: 'Reason', accessorKey: 'reason' },
-    { header: 'Status', cell: (row) => <span className="capitalize">{row.severity || 'Open'}</span> },
+    { header: 'Status', cell: (row) => <span className="capitalize">{row.status}</span> },
     { header: 'Actions', cell: () => <span className="text-blue-500 cursor-pointer hover:underline">Review</span> },
   ];
 

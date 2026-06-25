@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     const { data, error } = await supabaseAdmin
       .from('reports')
       .select('*')
-      .eq('status', 'pending');
+      .in('status', ['open', 'pending']);
 
     if (error) {
       console.error('Supabase error fetching reports:', error);

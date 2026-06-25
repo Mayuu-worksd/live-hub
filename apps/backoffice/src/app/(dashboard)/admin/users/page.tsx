@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Shield, Ban, Coins, Settings } from 'lucide-react';
-import { supabase } from '@/lib/supabase/client';
 import { cn } from '@/lib/utils/cn';
 import toast from 'react-hot-toast';
 import type { User } from '@/types/user';
@@ -15,11 +14,9 @@ export default function AdminUsersPage() {
 
   const search = async (q: string) => {
     setLoading(true);
-    const base = supabase.from('users').select('*').order('created_at', { ascending: false }).limit(50);
-    const { data } = q
-      ? await base.or(`email.ilike.%${q}%,username.ilike.%${q}%`)
-      : await base;
-    setUsers(data ?? []);
+    const res = await fetch(`/api/admin/users-list?q=${encodeURIComponent(q)}`);
+    const json = await res.json();
+    setUsers(json.data ?? []);
     setLoading(false);
   };
 
