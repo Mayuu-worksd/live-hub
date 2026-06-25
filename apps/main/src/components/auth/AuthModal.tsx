@@ -58,7 +58,7 @@ export function AuthModal() {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-md overflow-hidden rounded-3xl bg-[#0F0F0F] border border-white/10 shadow-2xl p-8"
+            className="relative w-full max-w-md h-full md:max-w-md md:h-auto overflow-hidden rounded-3xl bg-[#0F0F0F] border border-white/10 shadow-2xl p-8"
           >
             <div className="absolute inset-0 bg-grid-pattern opacity-30 pointer-events-none" />
             <div className="absolute -top-32 -left-32 w-64 h-64 bg-primary/20 blur-[100px] rounded-full pointer-events-none" />

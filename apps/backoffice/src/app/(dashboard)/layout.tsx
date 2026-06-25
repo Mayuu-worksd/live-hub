@@ -28,10 +28,42 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     );
   }
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
   return (
     <div className="flex min-h-screen bg-neutral-950">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto">{children}</main>
+      {/* Mobile hamburger */}
+      <button
+        className="absolute top-4 left-4 md:hidden p-2 rounded-md bg-neutral-800 text-white hover:bg-neutral-700 transition"
+        onClick={toggleSidebar}
+        aria-label="Toggle navigation"
+      >
+        {/* Simple three-bar icon */}
+        <svg viewBox="0 0 100 80" width="24" height="24" fill="currentColor">
+          <rect width="100" height="12"></rect>
+          <rect y="30" width="100" height="12"></rect>
+          <rect y="60" width="100" height="12"></rect>
+        </svg>
+      </button>
+
+      {/* Sidebar – hidden on mobile unless opened */}
+      <div
+        className={`${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} fixed inset-y-0 left-0 w-64 bg-[#1A1A1A] border-r border-white/[0.06] transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:flex`}
+      >
+        <Sidebar />
+      </div>
+
+      {/* Overlay for mobile when sidebar open */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/30 md:hidden"
+          onClick={toggleSidebar}
+        ></div>
+      )}
+
+      <main className="flex-1 overflow-y-auto md:ml-64">{children}</main>
     </div>
   );
 }
