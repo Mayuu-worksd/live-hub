@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get('stripe-signature')!;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   let event: any;
   try {
     event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
