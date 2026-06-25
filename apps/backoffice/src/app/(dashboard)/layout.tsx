@@ -9,6 +9,7 @@ const ALLOWED_ROLES = ['admin', 'super_admin', 'agency_manager', 'agency', 'mode
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [ready, setReady] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const cookies = document.cookie.split(';');
@@ -20,6 +21,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     setReady(true);
   }, [router]);
 
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
   if (!ready) {
     return (
       <div className="min-h-screen bg-neutral-950 flex items-center justify-center">
@@ -27,10 +30,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
     );
   }
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   return (
     <div className="flex min-h-screen bg-neutral-950">
