@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Video, ShieldCheck, Edit3, X, Image as ImageIcon, Camera, Lock, MoreHorizontal, MessageSquare, Share2, Ban, Flag, Grid, PlaySquare, Star, Plus, Phone } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useAuthModalStore } from '@/stores/useAuthModalStore';
 import toast from 'react-hot-toast';
 import { cn } from '@/lib/utils/cn';
 import Link from 'next/link';
@@ -23,6 +24,7 @@ export function ProfileView({
   streams: any[];
 }) {
   const { user: currentUser } = useAuthStore();
+  const { openModal } = useAuthModalStore();
   const [profile, setProfile] = useState(initialProfile);
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -63,7 +65,7 @@ export function ProfileView({
   }, [currentUser, isOwner, initialUser.id]);
 
   const handleFollowToggle = async () => {
-    if (!currentUser) return toast.error('Please login first');
+    if (!currentUser) return openModal('follow creators');
 
     try {
       if (followState === 'following' || followState === 'requested') {
@@ -103,7 +105,7 @@ export function ProfileView({
   };
 
   const handleCall = async () => {
-    if (!currentUser) return toast.error('Please login first');
+    if (!currentUser) return openModal('join calls');
     try {
       const res = await fetch('/api/calls', {
         method: 'POST',
@@ -216,7 +218,7 @@ export function ProfileView({
   };
 
   const handleUnlock = async (postId: string, videoId: string, price: number) => {
-    if (!currentUser) { toast.error('Sign in to unlock'); return; }
+    if (!currentUser) { openModal('purchase content'); return; }
     try {
       const res = await fetch('/api/posts/unlock', {
         method: 'POST',
@@ -294,9 +296,15 @@ export function ProfileView({
                   {followState === 'following' ? 'Following' : followState === 'requested' ? 'Requested' : 'Follow'}
                 </button>
                 
-                <Link href={`/messages/${initialUser.id}`} className="px-5 h-11 rounded-xl bg-white/[0.05] border border-white/[0.1] text-white font-semibold text-sm hover:bg-white/[0.1] transition-all flex items-center justify-center">
-                  <MessageSquare className="h-5 w-5" />
-                </Link>
+                {currentUser ? (
+                  <Link href={`/messages/${initialUser.id}`} className="px-5 h-11 rounded-xl bg-white/[0.05] border border-white/[0.1] text-white font-semibold text-sm hover:bg-white/[0.1] transition-all flex items-center justify-center">
+                    <MessageSquare className="h-5 w-5" />
+                  </Link>
+                ) : (
+                  <button onClick={() => openModal('message creators')} className="px-5 h-11 rounded-xl bg-white/[0.05] border border-white/[0.1] text-white font-semibold text-sm hover:bg-white/[0.1] transition-all flex items-center justify-center">
+                    <MessageSquare className="h-5 w-5" />
+                  </button>
+                )}
 
                 <button onClick={handleCall} className="px-5 h-11 rounded-xl bg-white/[0.05] border border-white/[0.1] text-white font-semibold text-sm hover:bg-white/[0.1] transition-all flex items-center justify-center">
                   <Phone className="h-5 w-5 text-emerald-400" />

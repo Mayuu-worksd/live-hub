@@ -8,12 +8,14 @@ import { cn } from '@/lib/utils/cn';
 
 const viewerNav = [
   { href: '/home', label: 'Home', icon: Home },
+  { href: '/explore', label: 'Explore', icon: Compass },
   { href: '/messages', label: 'Messages', icon: MessageCircle },
   { href: '/profile/me', label: 'Profile', icon: User },
 ];
 
 const creatorNav = [
   { href: '/home', label: 'Home', icon: Home },
+  { href: '/explore', label: 'Explore', icon: Compass },
   { href: '/creator/studio', label: 'Go Live', icon: Radio, highlight: true },
   { href: '/creator/content', label: 'Content Hub', icon: Video },
   { href: '/creator/dashboard', label: 'Dashboard', icon: TrendingUp },

@@ -33,8 +33,6 @@ export default function LiveStreamClient({ stream }: LiveStreamClientProps) {
 
   // Fetch LiveKit Token
   useEffect(() => {
-    if (!user) return;
-
     let active = true;
 
     const fetchToken = async () => {
@@ -42,7 +40,7 @@ export default function LiveStreamClient({ stream }: LiveStreamClientProps) {
         const res = await fetch('/api/livekit/token', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ streamId: stream.id, userId: user.id, role: isHost ? 'host' : 'viewer' }),
+          body: JSON.stringify({ streamId: stream.id, userId: user?.id || null, role: isHost ? 'host' : 'viewer' }),
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Failed to get token');
@@ -77,7 +75,7 @@ export default function LiveStreamClient({ stream }: LiveStreamClientProps) {
 
     return () => {
       active = false;
-      supabase.removeChannel(cohostChannel);
+      if (cohostChannel) supabase.removeChannel(cohostChannel);
     };
   }, [user, stream.id, isHost]);
 
@@ -124,13 +122,7 @@ export default function LiveStreamClient({ stream }: LiveStreamClientProps) {
     );
   }
 
-  if (!user) {
-    return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-4rem)]">
-        <p className="text-zinc-500 text-sm">Please sign in to view this stream.</p>
-      </div>
-    );
-  }
+
 
   if (error) {
     return (

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Radio, MessageCircle, User, TrendingUp } from 'lucide-react';
+import { Home, Radio, MessageCircle, User, TrendingUp, Compass } from 'lucide-react';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { cn } from '@/lib/utils/cn';
 
@@ -14,13 +14,14 @@ export function MobileNav() {
   const tabs = isCreator
     ? [
         { href: '/home', label: 'Home', icon: Home },
+        { href: '/explore', label: 'Explore', icon: Compass },
         { href: '/creator/studio', label: 'Go Live', icon: Radio, highlight: true },
-        { href: '/creator/dashboard', label: 'Dashboard', icon: TrendingUp },
         { href: '/messages', label: 'Messages', icon: MessageCircle },
         { href: '/profile/me', label: 'Profile', icon: User },
       ]
     : [
         { href: '/home', label: 'Home', icon: Home },
+        { href: '/explore', label: 'Explore', icon: Compass },
         { href: '/messages', label: 'Messages', icon: MessageCircle },
         { href: '/profile/me', label: 'Profile', icon: User },
       ];

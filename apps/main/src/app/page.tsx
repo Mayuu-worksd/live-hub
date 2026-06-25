@@ -68,7 +68,7 @@ export default function LandingPage() {
             Join the world's most vibrant community of creators and fans. Experience high-fidelity streaming, interactive events, and the future of digital social life.
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="flex flex-wrap justify-center gap-3">
-            <Link href="/home" className="bg-primary text-white px-8 py-3.5 rounded-xl font-bold flex items-center gap-2 hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 scale-100 hover:scale-105 active:scale-95 text-sm">
+            <Link href="/explore" className="bg-primary text-white px-8 py-3.5 rounded-xl font-bold flex items-center gap-2 hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 scale-100 hover:scale-105 active:scale-95 text-sm">
               Explore Now
               <ChevronRight className="w-4 h-4" />
             </Link>

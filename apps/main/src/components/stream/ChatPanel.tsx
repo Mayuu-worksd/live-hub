@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useAuthModalStore } from '@/stores/useAuthModalStore';
 import type { StreamMessage } from '@/types/stream';
 import { Send, ShieldAlert, Pin, MoreVertical, Ban, MicOff, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
@@ -11,6 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ChatPanel({ streamId, isHost, isOverlay = false }: { streamId: string, isHost?: boolean, isOverlay?: boolean }) {
   const { user } = useAuthStore();
+  const { openModal } = useAuthModalStore();
   const [messages, setMessages] = useState<StreamMessage[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -178,9 +180,12 @@ export default function ChatPanel({ streamId, isHost, isOverlay = false }: { str
       {/* Input Area (Hidden if overlay and not focused on mobile, but handled by parent) */}
       <div className={cn("p-4 border-t border-white/[0.05] shrink-0", isOverlay ? "bg-transparent pb-6" : "bg-white/[0.02]")}>
         {!user ? (
-          <div className="text-center py-3 text-xs text-zinc-500 bg-white/5 rounded-xl border border-white/10 backdrop-blur-md font-medium">
-            Sign in to chat
-          </div>
+          <button 
+            onClick={() => openModal('chat in real-time')} 
+            className="w-full text-center py-3 text-sm text-zinc-400 hover:text-white hover:bg-white/10 bg-white/5 rounded-xl border border-white/10 backdrop-blur-md font-semibold transition-colors cursor-pointer"
+          >
+            Sign in to join the conversation
+          </button>
         ) : (
           <form onSubmit={handleSend} className="flex items-center gap-2 relative">
             <input

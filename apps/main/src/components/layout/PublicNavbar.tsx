@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Search, Bell, Coins, Radio, LogOut } from 'lucide-react';
+import { Search, Bell, Coins, Radio, LogOut, Compass } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase/client';
 import { useAuthStore } from '@/stores/useAuthStore';
@@ -50,6 +50,17 @@ export function PublicNavbar() {
         <div className="hidden md:flex flex-1 max-w-md mx-8">
           <SearchComponent />
         </div>
+
+        {/* Explore shortcut for guests */}
+        {!user && !isLoading && (
+          <Link
+            href="/explore"
+            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors"
+          >
+            <Compass className="h-3.5 w-3.5" />
+            Explore
+          </Link>
+        )}
 
         <div className="flex items-center gap-3">
           {isLoading ? (

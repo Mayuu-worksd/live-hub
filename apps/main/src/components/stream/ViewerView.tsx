@@ -11,6 +11,8 @@ import type { Stream } from '@/types/stream';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useStreamStore } from '@/stores/useStreamStore';
+import { useAuthStore } from '@/stores/useAuthStore';
+import { useAuthModalStore } from '@/stores/useAuthModalStore';
 import { cn } from '@/lib/utils/cn';
 import { useVoiceEngine } from '@/hooks/useVoiceEngine';
 import VoiceSettingsModal from '../studio/VoiceSettingsModal';
@@ -38,6 +40,8 @@ export default function ViewerView({ stream }: { stream: Stream }) {
     }
   }, [processedTrack, localParticipant, canPublish]);
 
+  const { user } = useAuthStore();
+  const { openModal } = useAuthModalStore();
   const [following, setFollowing] = useState(false);
   const [showGifts, setShowGifts] = useState(false);
   const [showMobileChat, setShowMobileChat] = useState(false);
@@ -45,18 +49,31 @@ export default function ViewerView({ stream }: { stream: Stream }) {
   const { viewerCount } = useStreamStore();
   const [likes, setLikes] = useState(0);
 
+  const guard = (action: string, fn: () => void) => {
+    if (!user) {
+      openModal(action);
+    } else {
+      fn();
+    }
+  };
+
   const handleFollow = () => {
-    setFollowing(!following);
-    toast.success(following ? 'Unfollowed' : `Following ${stream.host?.username}`, { icon: '✨' });
+    guard('follow creators', () => {
+      setFollowing(!following);
+      toast.success(following ? 'Unfollowed' : `Following ${stream.host?.username}`, { icon: '✨' });
+    });
   };
 
   const handleLike = () => {
-    setLikes(prev => prev + 1);
-    // In a real app, this would trigger floating hearts animation and websocket event
+    guard('like streams', () => {
+      setLikes(prev => prev + 1);
+      // In a real app, this would trigger floating hearts animation and websocket event
+    });
   };
 
   const requestCohost = async () => {
-    try {
+    guard('request to co-host', async () => {
+      try {
       setCohostStatus('pending');
       const res = await fetch(`/api/streams/${stream.id}/cohost`, {
         method: 'POST',
@@ -69,6 +86,7 @@ export default function ViewerView({ stream }: { stream: Stream }) {
       toast.error('Failed to request co-host');
       setCohostStatus('idle');
     }
+    });
   };
 
   const toggleVideo = () => localParticipant.setCameraEnabled(!isVideoEnabled);
@@ -204,7 +222,7 @@ export default function ViewerView({ stream }: { stream: Stream }) {
               <button onClick={() => toast('Link copied!', { icon: '🔗' })} className="h-10 w-10 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 flex items-center justify-center text-white transition-colors">
                 <Share2 className="h-4 w-4" />
               </button>
-              <button onClick={() => setShowGifts(true)} className="px-6 h-10 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 flex items-center gap-2 text-sm font-bold text-white hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(139,92,246,0.3)]">
+              <button onClick={() => guard('send gifts', () => setShowGifts(true))} className="px-6 h-10 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 flex items-center gap-2 text-sm font-bold text-white hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(139,92,246,0.3)]">
                 <Gift className="w-4 h-4" /> Send Gift
               </button>
             </div>
@@ -286,7 +304,7 @@ export default function ViewerView({ stream }: { stream: Stream }) {
             </button>
             <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] font-bold text-white bg-black/60 px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">{likes}</span>
           </div>
-          <button onClick={() => setShowGifts(true)} className="h-12 w-12 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white transition-transform active:scale-90 shadow-[0_0_20px_rgba(217,70,239,0.5)]">
+          <button onClick={() => guard('send gifts', () => setShowGifts(true))} className="h-12 w-12 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white transition-transform active:scale-90 shadow-[0_0_20px_rgba(217,70,239,0.5)]">
             <Gift className="w-6 h-6" />
           </button>
         </div>

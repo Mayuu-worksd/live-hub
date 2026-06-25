@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Radio, X, Mail } from 'lucide-react';
 import { signInWithPopup } from 'firebase/auth';
@@ -12,7 +12,8 @@ import { cn } from '@/lib/utils/cn';
 
 export function AuthModal() {
   const router = useRouter();
-  const { isOpen, closeModal } = useAuthModalStore();
+  const pathname = usePathname();
+  const { isOpen, closeModal, actionMessage } = useAuthModalStore();
   const [loading, setLoading] = useState(false);
 
   const handleOAuth = async (provider: 'google' | 'apple') => {
@@ -76,8 +77,12 @@ export function AuthModal() {
               </div>
               
               <h2 className="text-2xl font-black text-white font-heading mb-2">Join LiveHub</h2>
-              <p className="text-sm text-zinc-400 mb-8 px-4">
-                Sign in to chat, send gifts, and support your favorite creators.
+              <p className="text-sm text-zinc-400 mb-8 px-4 leading-relaxed">
+                {actionMessage ? (
+                  <>Create a free account to <span className="text-white font-semibold">{actionMessage}</span>, send gifts, chat in real-time, and unlock exclusive features.</>
+                ) : (
+                  'Create an account to interact with creators, chat in real-time, send gifts, and unlock exclusive features.'
+                )}
               </p>
 
               <div className="w-full space-y-3">
@@ -118,7 +123,7 @@ export function AuthModal() {
               <button
                 onClick={() => {
                   closeModal();
-                  router.push('/register');
+                  router.push(`/register?redirect=${encodeURIComponent(pathname)}`);
                 }}
                 className="w-full mt-6 flex items-center justify-center gap-2 h-12 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
               >
@@ -131,7 +136,7 @@ export function AuthModal() {
                 <button
                   onClick={() => {
                     closeModal();
-                    router.push('/login');
+                    router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
                   }}
                   className="text-primary hover:text-primary/80 font-bold"
                 >
