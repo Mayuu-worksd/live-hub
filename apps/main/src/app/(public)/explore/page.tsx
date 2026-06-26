@@ -508,14 +508,48 @@ export default function ExplorePage() {
       {/* Auth modal (Google / Apple / Email) */}
       <AuthModal />
 
-      {/* Standalone top nav */}
-      <ExploreTopNav
-        search={search}
-        onSearch={setSearch}
-        onGateAction={triggerGate}
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-      />
+      {/* Standalone top nav — only for guests; logged-in users get the layout navbar */}
+      {!user && (
+        <ExploreTopNav
+          search={search}
+          onSearch={setSearch}
+          onGateAction={triggerGate}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+        />
+      )}
+
+      {/* Inline tab bar for logged-in users (since ExploreTopNav is hidden) */}
+      {user && (
+        <div className="sticky top-16 z-30 bg-[#090909]/95 backdrop-blur-xl border-b border-white/[0.06] px-3 sm:px-4 md:px-6">
+          <div className="max-w-[1440px] mx-auto flex items-center gap-2 py-3 overflow-x-auto hide-scrollbar">
+            {/* Search */}
+            <div className="relative flex-shrink-0 w-48">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-500" />
+              <input
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Search creators…"
+                className="w-full h-8 pl-8 pr-3 bg-white/[0.05] border border-white/[0.08] rounded-full text-xs text-white placeholder-zinc-600 outline-none focus:border-primary/40 focus:bg-white/[0.07] transition-all"
+              />
+            </div>
+            {TABS.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={cn(
+                  'flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200',
+                  activeTab === tab.id
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-zinc-400 hover:text-white hover:bg-white/[0.05]'
+                )}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Page content */}
       <div className="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-6 py-5">

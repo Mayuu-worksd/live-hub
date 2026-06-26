@@ -58,8 +58,9 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
   // Auth pages never need a guard or navbar
   if (isAuthPage) return <>{children}</>;
 
-  // Explore page is fully standalone — it has its own nav, no sidebar
-  if (pathname === '/explore' || pathname.startsWith('/explore/')) return <>{children}</>;
+  // Explore page is standalone for guests — logged-in users get the full layout with sidebar
+  const isExplorePage = pathname === '/explore' || pathname.startsWith('/explore/');
+  if (isExplorePage && !user && !isLoading) return <>{children}</>;
 
   // Show spinner while auth resolves — never a blank white/black screen
   if (isLoading) {
